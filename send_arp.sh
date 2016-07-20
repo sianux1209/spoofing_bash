@@ -3,7 +3,7 @@
 if [ $# -ne 1 ];
 then
 	echo "Invalid input!!"
-	echo -e "please input \"./bob_spf.sh [Target_IP]\""
+	echo -e "please input \"./send_arp.sh [Target_IP]\""
 	exit
 fi
 
