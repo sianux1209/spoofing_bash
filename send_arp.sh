@@ -18,7 +18,7 @@ do
 
 	#send ARP && take target mac
 	#$TMAC=$( arping -I ${IFACE} -c 1 "${1}" | grep "reply from ${1}" | awk -F ' ' '{print $4}' )
-	#$TMAC=$( arping -I ${iface} -c 1 ${1} | grep "reply from ${1}" | awk -F ' ' '{print $4}' )
+	#$TMAC=$( arping -I ${IFACE} -c 1 ${1} | grep "reply from ${1}" | awk -F ' ' '{print $4}' )
 	TMAC=$(arping -I ${IFACE} -c 1 ${1} | grep "reply from ${1}" | awk -F ' ' '{print $5}')
 	TMAC=${TMAC:1:17};
 
